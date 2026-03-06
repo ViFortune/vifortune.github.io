@@ -36,17 +36,12 @@ CGPA: **3.8/4.0**
 Ho Chi Minh City University of Technology<br>
 *Mar 2026 - Present*
 - Assisted lecturers in managing programming lab sessions
-- Helped studentys understand:
-    - Memory management
-    - Pointers
-    - Linked lists
-    - Object-Oriented Programming
+- Helped studentys understand: Memory management; Pointers; Linked lists; Object-Oriented Programming
 - Reviewed and debugged student assignments
----
+
 ### Undergraduate AI Researcher
 AITech Lab - HCMUT<br>
 *2024 - Present*
-
 - Participated in machine learing, computer vision and speech processing research
 - Collaborated with faculty to develop AI solutions
 - Contributed to competition solutions
