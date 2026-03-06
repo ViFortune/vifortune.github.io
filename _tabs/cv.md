@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Cirriculum Vitae
+title: Curriculum Vitae
 icon: fas fa-user-tie
 order: 1
 permalink: /cv/
