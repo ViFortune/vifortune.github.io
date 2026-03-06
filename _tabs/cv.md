@@ -15,9 +15,9 @@ Ho Chi Minh City University of Technology (HCMUT)
 
 **Email:** nxvifortune@gmail.com<br>
 **Phone:** +084 787958745<br>
-**Website:** https://vifortune.github.io<br>
-**LinkedIn:** https://linkedin.com/in/ltnghia<br>
-**GitHub:** https://github.com/ViFortune<br>
+**Website:** [vifortune.github.io](https://vifortune.github.io)<br>
+**LinkedIn:** [LinkedIn](https://linkedin.com/in/ltnghia)<br>
+**GitHub:** [Github](https://github.com/ViFortune)<br>
 
 ---
 ## Summary
@@ -62,7 +62,7 @@ Features:
 
 *Role*: Lead Data & ML Developer<br>
 *Tech Stack*: Python, Pandas, SQL, Matplotlib, Seaborn, Flask, Requests.<br>
-Github: https://github.com/khangbkk23/TimeSeries_AQI_Forecast_Vietnam_Province
+Github: [Air Quality Forecasting System](https://github.com/khangbkk23/TimeSeries_AQI_Forecast_Vietnam_Province)
 
 ---
 
@@ -86,7 +86,7 @@ Features:
 
 *Role*: Individual Researcher & Developer<br>
 *Tech Stack*: Python, PyTorch, Torchaudio, Conformer, CTC Loss, HDF5.<br>
-Github: https://github.com/ViFortune/DATH_TTNT
+Github: [Automated Speech Recognition](https://github.com/ViFortune/DATH_TTNT)
 
 ---
 
@@ -99,7 +99,7 @@ Features:
 
 *Role*: Full-stack Developer<br>
 *Tech Stack*: PHP 8.2, MySQL 8.0, JavaScript, Bootstrap 5, Docker.<br>
-Github: https://github.com/dung-h/LowlandCoffee
+Github: [Lowland Coffee](https://github.com/dung-h/LowlandCoffee)
 
 ---
 ### E-Commerce System Architecture [Database Design]
@@ -112,7 +112,7 @@ tional analysis and reporting use cases.
 
 *Role*: Database Designer<br>
 *Tech Stack*: PSQL Server, Relational Database Design, ERD/EERD.<br>
-Github: https://github.com/ngminhhhh/Database_Assignment2
+Github: [E-Commerce Database Design](https://github.com/ngminhhhh/Database_Assignment2)
 
 ## Technical Skills
 
