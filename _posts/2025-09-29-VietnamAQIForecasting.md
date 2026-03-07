@@ -7,6 +7,9 @@ tags: [e2e-ml-pipeline]
 author: ltnghia
 description: This post discusses about the End-to-End Data and Machine Learning pipeline and Web deployment to visualize the results.
 math: true
+image:
+  path: /assets/images/air_quality_demo/header.png
+  alt: UI of Forecasting Air Quality Web
 ---
 
 # Vietnam AQI Forecasting
