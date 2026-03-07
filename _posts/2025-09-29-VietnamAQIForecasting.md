@@ -56,7 +56,7 @@ therefore it may enter sleep mode after inactivity and require around
 
 ------------------------------------------------------------------------
 
-# Data Collection
+## Data Collection
 
 The website **cem.gov.vn** provides hourly air quality information from
 monitoring stations across Vietnam. By inspecting the structure of the
@@ -105,9 +105,9 @@ machine learning model.
 
 ------------------------------------------------------------------------
 
-# Data Preprocessing
+## Data Preprocessing
 
-## Removing unnecessary columns
+### Removing unnecessary columns
 
 After examining the monitoring data across stations, the most
 consistently available pollutants are:
@@ -136,7 +136,7 @@ This tabular structure is suitable for downstream analysis and modeling.
 
 ------------------------------------------------------------------------
 
-## Handling missing values
+### Handling missing values
 
 Environmental datasets often contain missing measurements due to sensor
 downtime or communication issues.
@@ -165,16 +165,16 @@ def fill_missing(csv_obj: pd.DataFrame):
 
 ------------------------------------------------------------------------
 
-# Exploratory Data Analysis
+## Exploratory Data Analysis
 
-## Distribution of pollutant indicators
+### Distribution of pollutant indicators
 
 The histogram distribution of the pollutant values roughly resembles a
 bell‑shaped curve, although it does not strictly follow a normal
 distribution. This is expected for real‑world environmental data where
 pollutant concentrations are influenced by multiple stochastic factors.
 
-## Temporal behavior
+### Temporal behavior
 
 Time‑series visualization shows that pollutant indicators often increase
 simultaneously during certain periods of the year.
@@ -188,13 +188,13 @@ patterns statistically.
 
 ------------------------------------------------------------------------
 
-# Feature Engineering
+## Feature Engineering
 
 Based on the initial hypothesis, several additional features were
 engineered to capture temporal and geographic patterns that may
 influence air quality.
 
-### Day of Week
+#### Day of Week
 
 The `Day_Of_Week` feature is derived from the `Date` column.\
 The hypothesis is that air quality may improve during weekends when
@@ -205,7 +205,7 @@ is applied:
 
     mon, tu, wed, thu, fri, sat, sun
 
-### Geographic Region
+#### Geographic Region
 
 Vietnam is divided into three broad regions:
 
@@ -216,7 +216,7 @@ Vietnam is divided into three broad regions:
 These regions have different climates and seasonal patterns which may
 influence pollutant dispersion.
 
-### Seasonal Indicators
+#### Seasonal Indicators
 
 Seasonal variables are also derived from geographic region and month:
 
@@ -229,7 +229,7 @@ Example dataset after feature engineering:
 
 ------------------------------------------------------------------------
 
-# Dataset Construction
+## Dataset Construction
 
 To convert the time series data into a supervised learning problem, a
 **sliding window approach** is used.
@@ -269,7 +269,7 @@ Each sample therefore contains:
 
 ------------------------------------------------------------------------
 
-# Model Training
+## Model Training
 
 The forecasting task is formulated as a **regression problem**.
 
@@ -307,7 +307,7 @@ the web application.
 
 ------------------------------------------------------------------------
 
-# Web Application and Deployment
+## Web Application and Deployment
 
 A simple web interface was implemented using **Flask**.
 
@@ -331,7 +331,7 @@ GitHub repository.
 
 ------------------------------------------------------------------------
 
-# Limitations and Future Work
+## Limitations and Future Work
 
 This project represents a preliminary exploration of air quality
 forecasting.
