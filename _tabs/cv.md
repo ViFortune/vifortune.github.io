@@ -51,6 +51,24 @@ Achievements from research:
 - Top 40 - ICPR 2026 Competition in public test round
 - Top 60 - Zalo AI Challenge 2025
 
+## Technical Skills
+
+### Machine Learning & Deep Learning:
+PyTorch, Torchaudio, Autoencoders, Diffusion Models, Conformer.
+
+### ML/Data Stack: 
+Pandas, NumPy, ETL Pipelines, Time-Series Forecasting, Flask.
+
+### Programming Languages: 
+Python, C/C++, SQL, JavaScript, PHP, Java.
+
+### Tools & Environments: 
+Git/GitHub, Docker, Linux/Bash, Makefiles, LAMP/XAMPP, LATEX.
+
+### Languages: 
+English (TOEIC 640 – Good working proficiency), Vietnamese (Native).
+
+
 ## Projects
 ### Air Quality Forecasting System [Data Science \& ML]
 Data Analytics | End-to-End ML Pipeline \& Web Application
@@ -113,23 +131,6 @@ tional analysis and reporting use cases.
 *Role*: Database Designer<br>
 *Tech Stack*: PSQL Server, Relational Database Design, ERD/EERD.<br>
 Github: [E-Commerce Database Design](https://github.com/ngminhhhh/Database_Assignment2)
-
-## Technical Skills
-
-### Machine Learning & Deep Learning:
-PyTorch, Torchaudio, Autoencoders, Diffusion Models, Conformer.
-
-### ML/Data Stack: 
-Pandas, NumPy, ETL Pipelines, Time-Series Forecasting, Flask.
-
-### Programming Languages: 
-Python, C/C++, SQL, JavaScript, PHP, Java.
-
-### Tools & Environments: 
-Git/GitHub, Docker, Linux/Bash, Makefiles, LAMP/XAMPP, LATEX.
-
-### Languages: 
-English (TOEIC 640 – Good working proficiency), Vietnamese (Native).
 
 ## Honors & Achievements
 Top 40 / 534+ Teams (Public Test Phase): ICPR 2026 Competition on Low-Resolution License Plate Recognition [2026]
