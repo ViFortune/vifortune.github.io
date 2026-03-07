@@ -1,18 +1,12 @@
 ---
-author: ltnghia
-categories:
-- Blog
-- Tech
-date: 2025-09-29
-description: End‑to‑end pipeline for collecting, processing, modeling
-  and deploying an air quality forecasting system for Vietnam.
-layout: post
-math: true
-tags:
-- machine-learning
-- data-pipeline
-- air-quality
 title: Vietnam AQI Forecasting (Air Quality)
+layout: post
+data: 2025-09-29
+categories: [Blog, Tech]
+tags: [e2e-ml-pipeline]
+author: ltnghia
+description: This post discusses about the End-to-End Data and Machine Learning pipeline and Web deployment to visualize the results.
+math: true
 ---
 
 # Vietnam AQI Forecasting
