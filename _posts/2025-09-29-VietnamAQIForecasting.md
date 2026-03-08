@@ -47,8 +47,8 @@ The main data sources used in this project are:
 
 A demo web application for air quality prediction is available here:
 
-**Demo:** [Air Quality Forecasting Demo](http://air-quality-forecasting-demo.onrender.com)
-**GitHub:** [Air Quality Forecasting Repository](https://github.com/ViFortune/Air-Quality-Forecasting-Demo)
+**Demo:** [Air Quality Demo](https://air-quality-forecasting-demo.onrender.com/)
+**GitHub:** [Air Quality Forecasting Repository](https://github.com/ViFortune/Air-Quality-Forecasting-Demo/)
 
 Note: the web application is deployed on the free tier of Render,
 therefore it may enter sleep mode after inactivity and require around
