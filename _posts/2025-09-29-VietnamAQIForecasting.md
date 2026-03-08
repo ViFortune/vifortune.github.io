@@ -227,7 +227,100 @@ Example dataset after feature engineering:
     Date,Day_Of_Week,VN_AQI,CO,PM-10,PM-2-5,SO2,mon,tu,wed,thu,fri,sat,sun,north,middle,south,spring,summer,autumn,winter,dry,rain
     2026-03-06,4,120,21,76,120,5,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0
 
+
 ------------------------------------------------------------------------
+
+
+
+## Data Storage with MongoDB
+After collecting and preprocessing air quality data, the next step in the pipeline is storing the dataset in a database so it can be reused by other components of the system such as model training or web applications.
+
+In this project, MongoDB Atlas is used as a cloud-based NoSQL database.
+
+MongoDB was choosen because:
+- It stores data in JSON-like documents, which fits well with data processed in Python.
+- It scales easily for large datasets.
+- It integrates smoothly with data science workflows.
+
+The pipeline connects to MongoDB using the `pymongo` client.
+
+Example connection setup:
+```python
+from pymongo import MongoClient
+import os
+
+MONGO_URI = os.getenv("MONGO_URI")
+
+def get_mongo_client():
+    client = MongoClient(host=MONGO_URI)
+    return client
+```
+
+The database name and collection name are configured using environment variables:
+```python
+DB_NAME = os.getenv("DB_NAME")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+```
+This approach prevents sensitive credentials from being hardcoded in the source code.
+
+
+------------------------------------------------------------------------
+
+
+## Converting DataFrame to MongoDB Documents
+The air quality dataset is initially processed as **Pandas DataFrame**.
+
+Before storing it in MongoDB, the dataset is converted into a list of JSON records.
+
+Example:
+```python
+client = get_mongo_client()
+
+db = client[DB_NAME]
+collection = db[COLLECTION_NAME]
+
+records = df.to_dict(orient='records')
+collection.insert_many(records)
+```
+
+The `orient='records'` option converts the dataframe into a list of dictionaries:
+
+Example structure:
+```JSON
+[
+  {
+    "Date": "2026-03-06",
+    "VN_AQI": 120,
+    "CO": 21,
+    "PM-10": 76,
+    "PM-2-5": 120,
+    "SO2": 5
+  },
+  {
+    "Date": "2026-03-05",
+    "VN_AQI": 74,
+    "CO": 16,
+    "PM-10": 56,
+    "PM-2-5": 74,
+    "SO2": 7
+  }
+]
+```
+
+The result on MongoDB will be:
+```mongodb
+_id: Object('69ad9ea83d3f7416ca1e18ce')
+Date: 2026-03-07T00:00:00.000+00:00
+VN_AQI: 120
+CO: 21
+PM-10: 76
+PM-2-5: 120
+SO2: 5
+```
+Each element becomes a **documents in MongoDB**.
+
+------------------------------------------------------------------------
+
 
 ## Dataset Construction
 
