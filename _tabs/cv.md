@@ -20,10 +20,10 @@ Ho Chi Minh City University of Technology (HCMUT)
 **GitHub:** [Github](https://github.com/ViFortune)<br>
 
 ---
-## Summary
+## OBJECTIVE
 Honors Computer Science undergraduate at Ho Chi Minh City University of Technology (GPA 3.8/4.0) with strong foundations in algorithms, machine learning systems, and backend architecture. Experienced in designing end-to-end ML pipelines, reproducing state-of-the-art deep learning models, and building scalable full-stack web applications using custom MVC architectures. Passionate about applying analytical thinking, data-driven problem solving, and research-driven approaches to real-world systems.
 
-## Education
+## EDUCATION
 
 **Ho Chi Minh City University of Technology (HCMUT)**
 Bachelor of Computer Science - Honors Program
@@ -31,7 +31,7 @@ Bachelor of Computer Science - Honors Program
 *2023 - Present*<br>
 CGPA: **3.8/4.0**
 
-## Experience
+## EXPERIENCE
 ### Invited Teaching Assistant
 Ho Chi Minh City University of Technology<br>
 *Mar 2026 - Present*
@@ -51,7 +51,7 @@ Achievements from research:
 - Top 40 - ICPR 2026 Competition in public test round
 - Top 60 - Zalo AI Challenge 2025
 
-## Technical Skills
+## TECHNICAL SKILLS \& LANGUAGES
 
 ### Machine Learning & Deep Learning:
 PyTorch, Torchaudio, Autoencoders, Diffusion Models, Conformer.
@@ -69,7 +69,7 @@ Git/GitHub, Docker, Linux/Bash, Makefiles, LAMP/XAMPP, LATEX.
 English (TOEIC 640 – Good working proficiency), Vietnamese (Native).
 
 
-## Projects
+## PROJECTS
 ### Air Quality Forecasting System [Data Science \& ML]
 Data Analytics | End-to-End ML Pipeline \& Web Application
 
@@ -132,7 +132,7 @@ tional analysis and reporting use cases.
 *Tech Stack*: PSQL Server, Relational Database Design, ERD/EERD.<br>
 Github: [E-Commerce Database Design](https://github.com/ngminhhhh/Database_Assignment2)
 
-## Honors & Achievements
+## HONORS \& ACHIEVEMENTS
 Top 40 / 534+ Teams (Public Test Phase): ICPR 2026 Competition on Low-Resolution License Plate Recognition [2026]
 
 Top 60 / 100+ Teams: Zalo AI Challenge (Aeroeyes Track) – Implemented robust object detection models for drone-
