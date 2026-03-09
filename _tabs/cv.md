@@ -51,7 +51,7 @@ Achievements from research:
 - Top 40 - ICPR 2026 Competition in public test round
 - Top 60 - Zalo AI Challenge 2025
 
-## TECHNICAL SKILLS \& LANGUAGES
+## TECHNICAL SKILLS & LANGUAGES
 
 ### Machine Learning & Deep Learning:
 PyTorch, Torchaudio, Autoencoders, Diffusion Models, Conformer.
@@ -70,8 +70,8 @@ English (TOEIC 640 – Good working proficiency), Vietnamese (Native).
 
 
 ## PROJECTS
-### Air Quality Forecasting System [Data Science \& ML]
-Data Analytics | End-to-End ML Pipeline \& Web Application
+### Air Quality Forecasting System [Data Science & ML]
+Data Analytics | End-to-End ML Pipeline & Web Application
 
 Features:
 - **Data Engineering & EDA**: Collected and cleaned daily air quality data from 42 government stations using Python and Pandas, handling missing values, outliers, and inconsistent measurements.
