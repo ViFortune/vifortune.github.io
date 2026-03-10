@@ -1,11 +1,11 @@
 ---
 title: Vietnam AQI Forecasting (Air Quality)
 layout: post
-data: 2025-09-29
+date: 2025-09-29
 categories: [Blog, Tech]
 tags: [e2e-ml-pipeline]
 author: ltnghia
-description: This post discusses about the End-to-End Data and Machine Learning pipeline and Web deployment to visualize the results.
+description: End-to-end data and machine learning pipeline for air quality forecasting in Vietnam.
 math: true
 image:
   path: /assets/images/air_quality_demo/header.png
@@ -16,31 +16,20 @@ image:
 
 ## Introduction
 
-Air pollution is a major environmental issue that directly affects
-public health and urban sustainability. Forecasting air quality
-indicators allows authorities and citizens to better prepare for
-pollution events and understand environmental patterns over time.
+Air pollution is a critical environmental issue affecting public health and urban sustainability. Forecasting air quality indicators helps authorities and citizens better understand pollution patterns and prepare for potential environmental risks.
 
-This project explores whether air quality indicators at a specific
-location can be predicted from:
+This project explores whether **air quality indicators can be predicted using historical environmental data** combined with temporal and geographic information.
 
--   Historical pollutant measurements
--   Temporal features (day of week)
--   Geographic information
--   Seasonal characteristics
+An **end-to-end machine learning pipeline** was developed including:
 
-To investigate this hypothesis, an **end‑to‑end data and machine
-learning pipeline** was developed.\
-The system includes the following stages:
+1. Data collection from monitoring portals  
+2. Data preprocessing  
+3. Feature engineering  
+4. Dataset construction  
+5. Model training (XGBoost)  
+6. Web deployment for visualization and forecasting  
 
-1.  Data collection from official environmental monitoring portals
-2.  Data cleaning and preprocessing
-3.  Feature engineering
-4.  Dataset construction for supervised learning
-5.  Model training using XGBoost
-6.  Web deployment for visualization and forecasting
-
-The main data sources used in this project are:
+Data sources:
 
 -   [https://envisoft.gov.vn](https://envisoft.gov.vn)
 -   [https://cem.gov.vn](https://cem.gov.vn)
@@ -50,108 +39,90 @@ A demo web application for air quality prediction is available here:
 **Demo:** [Air Quality Demo](https://air-quality-forecasting-demo.onrender.com/)
 **GitHub:** [Air Quality Forecasting Repository](https://github.com/ViFortune/Air-Quality-Forecasting-Demo/)
 
-Note: the web application is deployed on the free tier of Render,
-therefore it may enter sleep mode after inactivity and require around
-1--2 minutes to restart.
+> Note: The demo is hosted on Render free tier and may take more than 5 minutes to wake up.
 
-------------------------------------------------------------------------
+---
 
-## Data Collection
+# Data Collection
 
-The website **cem.gov.vn** provides hourly air quality information from
-monitoring stations across Vietnam. By inspecting the structure of the
-web interface, it is possible to identify metadata associated with each
-station:
+The website **cem.gov.vn** provides hourly air quality measurements from monitoring stations across Vietnam.
 
-    station_id: "31390908889087377344742439468"
-    res: { "CO": {...}, "PM-10": {...}, "SO2": {...}, "PM-2-5": {...}, "O3": {...}, "NO2": {...}}
-    station_name: "Hà Nội: Công viên Nhân Chính - Khuất Duy Tiến (KK)"
+Each station contains metadata such as:
 
-The most important elements are:
+```
+station_id: "31390908889087377344742439468"
+res: { "CO": {...}, "PM-10": {...}, "SO2": {...}, "PM-2-5": {...}, "O3": {...}, "NO2": {...}}
+station_name: "Hà Nội: Công viên Nhân Chính - Khuất Duy Tiến (KK)"
+```
 
--   `station_id`
--   pollutant keys contained in `res`
+Important identifiers include:
 
-These identifiers can be used to retrieve pollutant measurements from
-the monitoring system.
+- `station_id`
+- pollutant keys in `res`
 
-Due to legal and ethical considerations regarding automated data
-extraction from government websites, the exact implementation details of
-the scraping process are not included in this article.
+Using these identifiers, pollutant measurements can be retrieved.
 
-For each monitoring station, the collected data is stored in a CSV file
-with daily AQI indicators.
+Due to legal and ethical considerations regarding automated extraction from government portals, the exact scraping implementation is not included.
 
-Example:
+Example collected dataset:
 
-    STT,Date,VN_AQI,CO,NO2,O3,PM-10,PM-2-5,SO2
-    1,06/03/2026,120,21,7,12,76,120,5
-    2,05/03/2026,74,16,5,5,56,74,7
-    3,04/03/2026,47,11,5,11,35,47,14
-    4,03/03/2026,41,5,2,8,32,41,2
-    5,02/03/2026,51,15,4,13,41,51,8
+```
+STT,Date,VN_AQI,CO,NO2,O3,PM-10,PM-2-5,SO2
+1,06/03/2026,120,21,7,12,76,120,5
+2,05/03/2026,74,16,5,5,56,74,7
+3,04/03/2026,47,11,5,11,35,47,14
+```
 
-However, raw data obtained from monitoring portals often contains
-missing or inconsistent fields.
+Raw data often contains missing or inconsistent attributes:
 
-Example of a raw dataset with many missing attributes:
+```
+STT,Date,VN_AQI,Benzen,CH4,CO,...
+1,05/03/2026,83,-,-,-,...
+2,04/03/2026,55,-,-,-,...
+```
 
-    STT,Date,VN_AQI,Benzen,CH4,CO,Compass,...
-    1,05/03/2026,83,-,-,-,-,-
-    2,04/03/2026,55,-,-,-,-,-
+Therefore, preprocessing is required before training models.
 
-Therefore, a preprocessing pipeline is required before training any
-machine learning model.
+---
 
-------------------------------------------------------------------------
+# Data Preprocessing
 
-## Data Preprocessing
+## Removing unnecessary columns
 
-### Removing unnecessary columns
+Across monitoring stations, the most consistently available pollutants are:
 
-After examining the monitoring data across stations, the most
-consistently available pollutants are:
+- PM2.5  
+- PM10  
+- CO  
+- SO2  
 
--   PM2.5
--   PM10
--   CO
--   SO2
+Columns with more than **90% missing values** are removed.  
+The `STT` column is also dropped.
 
-Other pollutants such as NO2 or O3 appear less frequently and often
-contain a high proportion of missing values.
+Cleaned dataset:
 
-Columns with more than **90% missing values** are removed.\
-The column `STT` is also discarded because it only represents row
-indices.
+```
+Date,VN_AQI,CO,PM-10,PM-2-5,SO2
+06/03/2026,120,21,76,120,5
+05/03/2026,74,16,56,74,7
+04/03/2026,47,11,35,47,14
+```
 
-The cleaned dataset therefore becomes:
+---
 
-    Date,VN_AQI,CO,PM-10,PM-2-5,SO2
-    06/03/2026,120,21,76,120,5
-    05/03/2026,74,16,56,74,7
-    04/03/2026,47,11,35,47,14
-    03/03/2026,41,5,32,41,2
+## Handling missing values
 
-This tabular structure is suitable for downstream analysis and modeling.
+Environmental datasets often contain missing values due to sensor downtime or communication issues.
 
-------------------------------------------------------------------------
+Missing measurements are filled using **bidirectional linear interpolation**.
 
-### Handling missing values
-
-Environmental datasets often contain missing measurements due to sensor
-downtime or communication issues.
-
-To handle this issue, missing values are filled using **linear
-interpolation** from both directions of the time series.
-
-``` python
+```python
 def fill_missing(csv_obj: pd.DataFrame):
 
     cols = ['VN_AQI','CO','PM-10','PM-2-5','SO2',
             'mon','tu','wed','thu','fri','sat','sun',
             'north','middle','south',
-            'spring','summer','autumn','winter','dry','rain'
-            ]
+            'spring','summer','autumn','winter','dry','rain']
 
     csv_obj[cols] = csv_obj[cols].apply(pd.to_numeric).astype(np.float64)
 
@@ -163,88 +134,77 @@ def fill_missing(csv_obj: pd.DataFrame):
     return csv_obj
 ```
 
-------------------------------------------------------------------------
+---
 
-## Exploratory Data Analysis
+# Exploratory Data Analysis
 
-### Distribution of pollutant indicators
+### Distribution
 
-The histogram distribution of the pollutant values roughly resembles a
-bell‑shaped curve, although it does not strictly follow a normal
-distribution. This is expected for real‑world environmental data where
-pollutant concentrations are influenced by multiple stochastic factors.
+Pollutant values roughly follow a bell-shaped distribution, though not strictly Gaussian. This is typical for environmental data influenced by many stochastic factors.
 
 ### Temporal behavior
 
-Time‑series visualization shows that pollutant indicators often increase
-simultaneously during certain periods of the year.
+Time-series visualization shows that pollutants such as **PM2.5, PM10, CO and SO2** often increase together during certain periods.
 
-For example, from **September 2024 to May 2025**, concentrations of
-PM2.5, PM10, CO and SO2 appear to increase together. This suggests
-potential seasonal or meteorological influences.
+For example, from **September 2024 to May 2025**, these indicators tend to rise simultaneously, suggesting possible seasonal effects.
 
-However, a longer time span of data would be required to confirm these
-patterns statistically.
+However, longer observation periods are required for statistical confirmation.
 
-------------------------------------------------------------------------
+---
 
-## Feature Engineering
+# Feature Engineering
 
-Based on the initial hypothesis, several additional features were
-engineered to capture temporal and geographic patterns that may
-influence air quality.
+Additional features were created to capture temporal and geographic patterns.
 
-#### Day of Week
+## Day of Week
 
-The `Day_Of_Week` feature is derived from the `Date` column.\
-The hypothesis is that air quality may improve during weekends when
-industrial activity and transportation decrease.
+Air quality may change between weekdays and weekends due to differences in traffic and industrial activity.
 
-To encode this information for machine learning models, one‑hot encoding
-is applied:
+One-hot encoding is used:
 
-    mon, tu, wed, thu, fri, sat, sun
+```
+mon, tu, wed, thu, fri, sat, sun
+```
 
-#### Geographic Region
+## Geographic Region
 
-Vietnam is divided into three broad regions:
+Vietnam is divided into three regions:
 
--   North
--   Central
--   South
+- North
+- Central
+- South
 
-These regions have different climates and seasonal patterns which may
-influence pollutant dispersion.
+These regions have distinct climates and pollution patterns.
 
-#### Seasonal Indicators
+## Seasonal Indicators
 
-Seasonal variables are also derived from geographic region and month:
+Seasonal variables are derived from region and month:
 
-    spring, summer, autumn, winter, dry, rain
+```
+spring, summer, autumn, winter, dry, rain
+```
 
 Example dataset after feature engineering:
 
-    Date,Day_Of_Week,VN_AQI,CO,PM-10,PM-2-5,SO2,mon,tu,wed,thu,fri,sat,sun,north,middle,south,spring,summer,autumn,winter,dry,rain
-    2026-03-06,4,120,21,76,120,5,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0
+```
+Date,Day_Of_Week,VN_AQI,CO,PM-10,PM-2-5,SO2,mon,tu,wed,thu,fri,sat,sun,north,middle,south,spring,summer,autumn,winter,dry,rain
+2026-03-06,4,120,21,76,120,5,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0
+```
 
+---
 
-------------------------------------------------------------------------
+# Data Storage with MongoDB
 
+After preprocessing, data is stored in **MongoDB Atlas**.
 
+MongoDB was chosen because:
 
-## Data Storage with MongoDB
-After collecting and preprocessing air quality data, the next step in the pipeline is storing the dataset in a database so it can be reused by other components of the system such as model training or web applications.
+- JSON-like document structure
+- Good compatibility with Python data pipelines
+- Easy horizontal scalability
 
-In this project, MongoDB Atlas is used as a cloud-based NoSQL database.
+Example connection:
 
-MongoDB was choosen because:
-- It stores data in JSON-like documents, which fits well with data processed in Python.
-- It scales easily for large datasets.
-- It integrates smoothly with data science workflows.
-
-The pipeline connects to MongoDB using the `pymongo` client.
-
-Example connection setup:
 ```python
 from pymongo import MongoClient
 import os
@@ -256,23 +216,19 @@ def get_mongo_client():
     return client
 ```
 
-The database name and collection name are configured using environment variables:
+Configuration via environment variables:
+
 ```python
 DB_NAME = os.getenv("DB_NAME")
 COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 ```
-This approach prevents sensitive credentials from being hardcoded in the source code.
 
+---
 
-------------------------------------------------------------------------
+# Converting DataFrame to MongoDB Documents
 
+Pandas DataFrames are converted into JSON-like documents before insertion.
 
-## Converting DataFrame to MongoDB Documents
-The air quality dataset is initially processed as **Pandas DataFrame**.
-
-Before storing it in MongoDB, the dataset is converted into a list of JSON records.
-
-Example:
 ```python
 client = get_mongo_client()
 
@@ -283,100 +239,50 @@ records = df.to_dict(orient='records')
 collection.insert_many(records)
 ```
 
-The `orient='records'` option converts the dataframe into a list of dictionaries:
+Example document:
 
-Example structure:
-```JSON
-[
-  {
-    "Date": "2026-03-06",
-    "VN_AQI": 120,
-    "CO": 21,
-    "PM-10": 76,
-    "PM-2-5": 120,
-    "SO2": 5
-  },
-  {
-    "Date": "2026-03-05",
-    "VN_AQI": 74,
-    "CO": 16,
-    "PM-10": 56,
-    "PM-2-5": 74,
-    "SO2": 7
-  }
-]
+```json
+{
+  "Date": "2026-03-06",
+  "VN_AQI": 120,
+  "CO": 21,
+  "PM-10": 76,
+  "PM-2-5": 120,
+  "SO2": 5
+}
 ```
 
-The result on MongoDB will be:
-```mongodb
-_id: Object('69ad9ea83d3f7416ca1e18ce')
-Date: 2026-03-07T00:00:00.000+00:00
-VN_AQI: 120
-CO: 21
-PM-10: 76
-PM-2-5: 120
-SO2: 5
-```
-Each element becomes a **documents in MongoDB**.
+Each record becomes a MongoDB document.
 
-------------------------------------------------------------------------
+---
 
+# Dataset Construction
 
-## Dataset Construction
+The time series data is transformed into a supervised learning problem using a **sliding window**.
 
-To convert the time series data into a supervised learning problem, a
-**sliding window approach** is used.
+For each training sample:
 
-For each sample:
+- **Previous 7 days** → input features  
+- **Next day** → prediction target
 
--   The previous **7 days** of pollutant measurements are used as input
-    features.
--   The **next day** pollutant values become the prediction targets.
+This captures short-term temporal dependencies while keeping the model simple.
 
-This design captures short‑term temporal dependencies while keeping the
-model structure simple.
+---
 
-The implementation is shown below.
+# Model Training
 
-``` python
-def prepare_data(dir, dst_pt, lagged_number=7):
+The task is formulated as a **regression problem**.
 
-    cols = ['Date','Day_Of_Week','CO','PM-10','PM-2-5','SO2','VN_AQI',
-            'mon','tu','wed','thu','fri','sat','sun',
-            'north','middle','south',
-            'spring','summer','autumn','winter','dry','rain']
+Separate models are trained for:
 
-    data_dict = {
-        "X":[],
-        "CO":[],
-        "PM-10":[],
-        "PM-2-5":[],
-        "SO2":[]
-    }
-```
+- CO
+- PM10
+- PM2.5
+- SO2
 
-Each sample therefore contains:
+Algorithm: **XGBoost**
 
--   Lagged pollutant values (7 days)
--   Contextual features of the target day
-
-------------------------------------------------------------------------
-
-## Model Training
-
-The forecasting task is formulated as a **regression problem**.
-
-Separate models are trained for each pollutant:
-
--   CO
--   PM10
--   PM2.5
--   SO2
-
-The algorithm used is **XGBoost**, a gradient boosting method known for
-strong performance on tabular datasets.
-
-``` python
+```python
 model = xgb.XGBRegressor(
     objective='reg:squarederror',
     n_estimators=1000,
@@ -386,66 +292,98 @@ model = xgb.XGBRegressor(
 )
 ```
 
-The dataset is split into:
+Dataset split:
 
--   80% training
--   10% validation
--   10% testing
+- 80% training  
+- 10% validation  
+- 10% testing  
 
-The most recent observations are reserved for validation and testing to
-preserve the chronological order of the time series.
+Chronological order is preserved to avoid data leakage.
 
-Trained models are saved using `joblib` so they can later be loaded by
-the web application.
+Trained models are stored using `joblib`.
 
-------------------------------------------------------------------------
+---
 
-## Web Application and Deployment
+# Data Pipeline & Storage Integration
 
-A simple web interface was implemented using **Flask**.
+MongoDB also supports pipeline state management.
 
-The system performs the following steps automatically:
+Pipeline routine:
 
-1.  Retrieve the latest monitoring data
-2.  Run preprocessing and feature engineering
-3.  Construct model inputs
-4.  Generate predictions for the next 7 days
+1. **Crawl & Sync** – collect latest monitoring data  
+2. **State Management** – store `last_run_time` in a separate collection  
+3. **Preprocessing** – clean data and generate model inputs  
 
-Predictions are generated recursively:\
-the prediction of day `t+1` becomes part of the input for predicting day
-`t+2`.
+This design allows the system to resume processing reliably.
 
-To keep the system up‑to‑date, a scheduled job runs every morning at
-**05:00** using `cron` and `apscheduler` to refresh the dataset and
-update predictions.
+---
 
-The web service is deployed on **Render** and connected directly to the
-GitHub repository.
+# Modernized Web Architecture
 
-------------------------------------------------------------------------
+The newer version replaces server-side plotting with a **JSON API architecture**.
 
-## Limitations and Future Work
+## Backend (Flask API)
 
-This project represents a preliminary exploration of air quality
-forecasting.
+Instead of generating static plots, Flask provides an API returning compact JSON:
 
-Several improvements could be explored in future work:
+- **Dates** – timeline sequence  
+- **Values** – pollutant indicators  
+- **Metadata** – indices separating real and predicted values  
 
--   Automated periodic retraining as new data becomes available
+## Client-side Visualization (Plotly.js)
 
--   Integration of meteorological variables (temperature, humidity, wind
-    speed)
+Charts are rendered directly in the browser using Plotly.
 
--   Inclusion of additional monitoring stations
+Advantages:
 
--   Evaluation using more comprehensive metrics
+- Interactive UI
+- Stateless deployment
+- Responsive charts
+- Real-time updates via AJAX
 
--   Exploration of advanced time‑series models such as
+---
 
-    -   LSTM
-    -   Temporal CNN
-    -   Transformer‑based forecasting models
+# Web Application and Deployment
 
-Despite its simplicity, the current system demonstrates how an
-end‑to‑end machine learning pipeline can be built for environmental
-monitoring and deployed as an accessible web application.
+The web interface is built using **Flask**.
+
+Workflow:
+
+1. Retrieve latest monitoring data  
+2. Preprocess and generate features  
+3. Construct model inputs  
+4. Forecast next **7 days**
+
+Predictions are generated **recursively**:
+prediction of day `t+1` becomes input for predicting `t+2`.
+
+A scheduled job runs daily at **05:00** using:
+
+- `cron`
+- `apscheduler`
+
+Deployment:
+
+- Render (web hosting)
+- GitHub integration
+
+---
+
+# Limitations and Future Work
+
+This project is an initial exploration of air quality forecasting.
+
+Possible improvements:
+
+- Automated model retraining  
+- Integration of meteorological data  
+- Additional monitoring stations  
+- More advanced evaluation metrics  
+
+Future models may include:
+
+- LSTM  
+- Temporal CNN  
+- Transformer-based forecasting models  
+
+Despite its simplicity, the system demonstrates how an **end-to-end machine learning pipeline** can be built and deployed for environmental monitoring.
